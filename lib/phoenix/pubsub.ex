@@ -267,7 +267,8 @@ defmodule Phoenix.PubSub do
 
   @doc false
   def dispatch(entries, :none, message) do
-    for {pid, _} <- entries do
+    for {pid, opts} <- entries do
+      if delay = opts[:delay], do: delay.(opts)
       send(pid, message)
     end
 
